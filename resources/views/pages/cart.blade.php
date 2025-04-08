@@ -98,9 +98,16 @@
                     </a>
                 </div>
                 <div class="col-sm-6 text-right">
-                    <a href="{{ route('dathang') }}" class="btn btn-success">
-                        Thanh toán <i class="fa fa-arrow-right"></i>
-                    </a>
+                    @if(Auth::check())
+                        <a href="{{ route('dathang') }}" class="btn btn-success">
+                            Thanh toán <i class="fa fa-arrow-right"></i>
+                        </a>
+                    @else
+                        <p>Vui lòng <a href="{{ route('login') }}">đăng nhập</a> để thanh toán</p>
+                        <a href="{{ route('login') }}" class="btn btn-info">
+                            Đăng nhập để thanh toán <i class="fa fa-arrow-right"></i>
+                        </a>
+                    @endif
                 </div>
             </div>
             @endif
