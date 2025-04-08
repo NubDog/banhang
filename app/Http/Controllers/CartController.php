@@ -39,10 +39,49 @@ class CartController extends Controller
         $cart->add($product, $id);
         
         // Lưu giỏ hàng vào session
-        Session::put('cart', $cart);
+        $request->session()->put('cart', $cart);
         
         // Chuyển hướng về trang trước đó
         return redirect()->back()->with('success', 'Đã thêm sản phẩm vào giỏ hàng');
+    }
+    
+    // Thêm nhiều sản phẩm vào giỏ hàng
+    public function addManyToCart(Request $request, $id)
+    {
+        $product = Product::find($id);
+        if (!$product) {
+            return redirect()->route('home')->with('error', 'Sản phẩm không tồn tại');
+        }
+        
+        $oldCart = Session::has('cart') ? Session::get('cart') : null;
+        $cart = new CartModel($oldCart);
+        
+        $quantity = $request->input('qty', 1);
+        $cart->addMany($product, $id, $quantity);
+        
+        $request->session()->put('cart', $cart);
+        
+        return redirect()->back()->with('success', 'Đã thêm sản phẩm vào giỏ hàng');
+    }
+    
+    // Giảm số lượng sản phẩm trong giỏ hàng
+    public function reduceByOne($id)
+    {
+        $oldCart = Session::has('cart') ? Session::get('cart') : null;
+        if (!$oldCart) {
+            return redirect()->route('home');
+        }
+        
+        $cart = new CartModel($oldCart);
+        $cart->reduceByOne($id);
+        
+        if (count($cart->items) > 0) {
+            Session::put('cart', $cart);
+        } else {
+            Session::forget('cart');
+        }
+        
+        return redirect()->back()->with('success', 'Đã giảm số lượng sản phẩm');
     }
     
     // Xóa sản phẩm khỏi giỏ hàng
@@ -95,40 +134,5 @@ class CartController extends Controller
             'totalPrice' => $cart->totalPrice,
             'totalQty' => $cart->totalQty
         ]);
-    }
-    
-    // Hiển thị trang đặt hàng
-    public function getCheckout()
-    {
-        if (!Session::has('cart')) {
-            return redirect()->route('home');
-        }
-        
-        $oldCart = Session::get('cart');
-        $cart = new CartModel($oldCart);
-        
-        return view('pages.checkout', [
-            'products' => $cart->items,
-            'totalPrice' => $cart->totalPrice,
-            'totalQty' => $cart->totalQty
-        ]);
-    }
-    
-    // Xử lý đặt hàng
-    public function postCheckout(Request $request)
-    {
-        if (!Session::has('cart')) {
-            return redirect()->route('home');
-        }
-        
-        $oldCart = Session::get('cart');
-        $cart = new CartModel($oldCart);
-        
-        // Xử lý lưu đơn hàng vào database
-        // ...
-        
-        Session::forget('cart');
-        
-        return redirect()->route('home')->with('success', 'Đặt hàng thành công');
     }
 }
