@@ -98,7 +98,7 @@
                     </a>
                 </div>
                 <div class="col-sm-6 text-right">
-                    <a href="#" class="btn btn-success">
+                    <a href="{{ route('dathang') }}" class="btn btn-success">
                         Thanh toán <i class="fa fa-arrow-right"></i>
                     </a>
                 </div>

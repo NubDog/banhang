@@ -31,10 +31,10 @@ Route::get('/loai-san-pham/{type_id}', [ProductController::class, 'getProductsBy
 
 // Giỏ hàng
 // Route cho giỏ hàng
+// Giỏ hàng và đặt hàng
 Route::get('add-to-cart/{id}', [CartController::class, 'addToCart'])->name('add-to-cart');
-Route::post('add-many-to-cart/{id}', [CartController::class, 'addManyToCart'])->name('add-many-to-cart');
-Route::get('reduce-by-one/{id}', [CartController::class, 'reduceByOne'])->name('reduce-by-one');
+Route::get('reduce-by-one/{id}', [CartController::class, 'reduceByOne'])->name('reduce-by-one'); // Add this line
 Route::get('remove-from-cart/{id}', [CartController::class, 'removeFromCart'])->name('remove-from-cart');
 Route::get('cart', [CartController::class, 'showCart'])->name('cart');
-Route::get('/dat-hang', [CartController::class, 'getCheckout'])->name('dathang');
-Route::post('/dat-hang', [CartController::class, 'postCheckout'])->name('dathang');
+Route::get('dat-hang', [CartController::class, 'getCheckout'])->name('dathang');
+Route::post('dat-hang', [CartController::class, 'postCheckout'])->name('dathang');

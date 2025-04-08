@@ -13,15 +13,15 @@ class Customer extends Model
     
     protected $fillable = [
         'name',
-        'address',
-        'email',
         'gender',
+        'email',
+        'address',
         'phone_number',
-        'note',
+        'note'
     ];
-
-    protected $casts = [
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
-    ];
+    
+    public function bills()
+    {
+        return $this->hasMany(Bill::class, 'id_customer', 'id');
+    }
 }

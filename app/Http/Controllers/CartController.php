@@ -8,6 +8,7 @@ use App\Models\ProductType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\View;
+use App\Models\Customer;
 
 class CartController extends Controller
 {
@@ -134,5 +135,67 @@ class CartController extends Controller
             'totalPrice' => $cart->totalPrice,
             'totalQty' => $cart->totalQty
         ]);
+    }
+    
+    // Hiển thị trang đặt hàng
+    public function getCheckout()
+    {
+        if (!Session::has('cart')) {
+            return redirect()->route('home')->with('error', 'Giỏ hàng trống');
+        }
+        
+        $oldCart = Session::get('cart');
+        $cart = new CartModel($oldCart);
+        
+        return view('pages.checkout', [
+            'cart' => $cart,
+            'products' => $cart->items,
+            'totalPrice' => $cart->totalPrice,
+            'totalQty' => $cart->totalQty
+        ]);
+    }
+    
+    // Xử lý đặt hàng
+    public function postCheckout(Request $request)
+    {
+        if (!Session::has('cart')) {
+            return redirect()->route('home')->with('error', 'Giỏ hàng trống');
+        }
+        
+        $cart = Session::get('cart');
+        
+        // Lưu thông tin khách hàng
+$customer = new Customer();
+        $customer->name = $request->input('name');
+        $customer->gender = $request->input('gender');
+        $customer->email = $request->input('email');
+        $customer->address = $request->input('address');
+        $customer->phone_number = $request->input('phone_number');
+        $customer->note = $request->input('notes');
+        $customer->save();
+        
+        // Lưu thông tin đơn hàng
+$bill = new \App\Models\Bill();
+        $bill->id_customer = $customer->id;
+        $bill->date_order = date('Y-m-d');
+        $bill->total = $cart->totalPrice;
+        $bill->payment = $request->input('payment_method');
+        $bill->note = $request->input('notes');
+        $bill->save();
+        
+        // Lưu chi tiết đơn hàng
+        foreach ($cart->items as $key => $value) {
+            $bill_detail = new \App\Models\BillDetail();
+            $bill_detail->id_bill = $bill->id;
+            $bill_detail->id_product = $key;
+            $bill_detail->quantity = $value['qty'];
+            $bill_detail->unit_price = $value['price'] / $value['qty'];
+            $bill_detail->save();
+        }
+        
+        // Xóa giỏ hàng
+        Session::forget('cart');
+        
+        return redirect()->route('home')->with('success', 'Đặt hàng thành công');
     }
 }

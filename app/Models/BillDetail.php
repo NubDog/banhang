@@ -15,23 +15,14 @@ class BillDetail extends Model
         'id_bill',
         'id_product',
         'quantity',
-        'unit_price',
+        'unit_price'
     ];
-
-    protected $casts = [
-        'quantity' => 'integer',
-        'unit_price' => 'double',
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
-    ];
-
-    // Define relationship with Bill
+    
     public function bill()
     {
         return $this->belongsTo(Bill::class, 'id_bill', 'id');
     }
-
-    // Define relationship with Product (assuming you have a Product model)
+    
     public function product()
     {
         return $this->belongsTo(Product::class, 'id_product', 'id');
