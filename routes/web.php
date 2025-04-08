@@ -38,3 +38,6 @@ Route::get('remove-from-cart/{id}', [CartController::class, 'removeFromCart'])->
 Route::get('cart', [CartController::class, 'showCart'])->name('cart');
 Route::get('dat-hang', [CartController::class, 'getCheckout'])->name('dathang');
 Route::post('dat-hang', [CartController::class, 'postCheckout'])->name('dathang');
+
+// Temporary route to check users table structure
+Route::get('/check-users-table', [UserController::class, 'checkUsersTable']);

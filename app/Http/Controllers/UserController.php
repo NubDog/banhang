@@ -54,7 +54,8 @@ class UserController extends Controller
         $user->password = Hash::make($request->password);
         $user->phone = $request->phone;
         $user->address = $request->address;
-        $user->level = 3;  // level=1: admin; level=2: kỹ thuật; level=3: khách hàng
+        // Remove the level assignment for now
+        // $user->level = 3;
         $user->save();
 
         return redirect()->back()->with('success', 'Tạo tài khoản thành công');
@@ -92,5 +93,12 @@ class UserController extends Controller
         Auth::logout();
         Session::forget('cart');
         return redirect()->route('home');
+    }
+
+    // Add this temporarily to see the table structure
+    public function checkUsersTable()
+    {
+        $columns = \Illuminate\Support\Facades\DB::select('SHOW COLUMNS FROM users');
+        dd($columns); // This will display the table structure
     }
 }
