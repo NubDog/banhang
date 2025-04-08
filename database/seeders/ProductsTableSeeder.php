@@ -55,6 +55,7 @@ class ProductsTableSeeder extends Seeder
                 'image' => 'T-90.png',
                 'unit' => 'cái',
                 'new' => 1,
+                'is_promotion' => 0, // Will be randomly set later
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -67,6 +68,7 @@ class ProductsTableSeeder extends Seeder
                 'image' => 'Hinh-anh-tau-con-thoi-dep-nhat.png',
                 'unit' => 'cái',
                 'new' => 1,
+                'is_promotion' => 0, // Will be randomly set later
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -79,6 +81,7 @@ class ProductsTableSeeder extends Seeder
                 'image' => 'anh-dep-ve-banh-chung_023617585.png',
                 'unit' => 'cái',
                 'new' => 0,
+                'is_promotion' => 0, // Will be randomly set later
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -91,6 +94,7 @@ class ProductsTableSeeder extends Seeder
                 'image' => '6999296.png',
                 'unit' => 'cái',
                 'new' => 1,
+                'is_promotion' => 0, // Will be randomly set later
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -103,13 +107,28 @@ class ProductsTableSeeder extends Seeder
                 'image' => 'smiling-giga-chad-2uzbwfl2i4sbu16m.png',
                 'unit' => 'cái',
                 'new' => 1,
+                'is_promotion' => 0, // Will be randomly set later
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
         ];
         
+        // Insert products
         foreach ($products as $product) {
             DB::table('products')->insert($product);
+        }
+        
+        // Now randomly set 4-6 products as promotional
+        $productIds = DB::table('products')->pluck('id')->toArray();
+        $numPromotional = rand(4, 6);
+        $promotionalIds = array_rand(array_flip($productIds), min($numPromotional, count($productIds)));
+        
+        if (!is_array($promotionalIds)) {
+            $promotionalIds = [$promotionalIds];
+        }
+        
+        foreach ($promotionalIds as $id) {
+            DB::table('products')->where('id', $id)->update(['is_promotion' => 1]);
         }
     }
 }
