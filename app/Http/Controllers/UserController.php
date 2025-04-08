@@ -80,17 +80,23 @@ class UserController extends Controller
         ]);
 
         if (Auth::attempt($credentials)) {
-            return redirect()->route('home')->with('success', 'Đăng nhập thành công');
+            return redirect()->route('home')->with([
+                'flag' => 'success',
+                'message' => 'Đăng nhập thành công'
+            ]);
         }
 
-        return back()->withErrors([
-            'email' => 'Email hoặc mật khẩu không đúng',
+        return back()->with([
+            'flag' => 'danger',
+            'message' => 'Email hoặc mật khẩu không đúng'
         ]);
     }
 
-    public function getLogout()
+    public function getLogout(Request $request)
     {
         Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
         Session::forget('cart');
         return redirect()->route('home');
     }
