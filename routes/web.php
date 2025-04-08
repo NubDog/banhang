@@ -30,7 +30,9 @@ Route::get('/san-pham/{id}', [ProductController::class, 'getProductDetail'])->na
 Route::get('/loai-san-pham/{type_id}', [ProductController::class, 'getProductsByType'])->name('loaisanpham');
 
 // Giỏ hàng
-Route::get('/add-to-cart/{id}', [CartController::class, 'addToCart'])->name('add-to-cart');
-Route::get('/xoa-gio-hang/{id}', [CartController::class, 'removeFromCart'])->name('xoagiohang');
+// Route cho giỏ hàng
+Route::get('add-to-cart/{id}', [CartController::class, 'addToCart'])->name('add-to-cart');
+Route::get('remove-from-cart/{id}', [CartController::class, 'removeFromCart'])->name('remove-from-cart');
+Route::get('cart', [CartController::class, 'showCart'])->name('cart');
 Route::get('/dat-hang', [CartController::class, 'getCheckout'])->name('dathang');
 Route::post('/dat-hang', [CartController::class, 'postCheckout'])->name('dathang');
