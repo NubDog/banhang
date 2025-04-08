@@ -12,12 +12,12 @@
                     <h4 class="widget-title">Information</h4>
                     <div>
                         <ul>
-                            <li><a href="#"><i class="fa fa-chevron-right"></i> Web Design</a></li>
-                            <li><a href="#"><i class="fa fa-chevron-right"></i> Web development</a></li>
-                            <li><a href="#"><i class="fa fa-chevron-right"></i> Marketing</a></li>
-                            <li><a href="#"><i class="fa fa-chevron-right"></i> Tips</a></li>
-                            <li><a href="#"><i class="fa fa-chevron-right"></i> Resources</a></li>
-                            <li><a href="#"><i class="fa fa-chevron-right"></i> Illustrations</a></li>
+                            <li><a href="blog_fullwidth_2col.html"><i class="fa fa-chevron-right"></i> Web Design</a></li>
+                            <li><a href="blog_fullwidth_2col.html"><i class="fa fa-chevron-right"></i> Web development</a></li>
+                            <li><a href="blog_fullwidth_2col.html"><i class="fa fa-chevron-right"></i> Marketing</a></li>
+                            <li><a href="blog_fullwidth_2col.html"><i class="fa fa-chevron-right"></i> Tips</a></li>
+                            <li><a href="blog_fullwidth_2col.html"><i class="fa fa-chevron-right"></i> Resources</a></li>
+                            <li><a href="blog_fullwidth_2col.html"><i class="fa fa-chevron-right"></i> Illustrations</a></li>
                         </ul>
                     </div>
                 </div>
@@ -50,13 +50,13 @@
 </div> <!-- #footer -->
 <div class="copyright">
     <div class="container">
-        <p class="pull-left">Privacy policy. (&copy;) {{ date('Y') }}</p>
+        <p class="pull-left">Privacy policy. (&copy;) 2014</p>
         <p class="pull-right pay-options">
-            <a href="#"><img src="{{ asset('assets/dest/images/pay/master.jpg') }}" alt="" /></a>
-            <a href="#"><img src="{{ asset('assets/dest/images/pay/pay.jpg') }}" alt="" /></a>
-            <a href="#"><img src="{{ asset('assets/dest/images/pay/visa.jpg') }}" alt="" /></a>
-            <a href="#"><img src="{{ asset('assets/dest/images/pay/paypal.jpg') }}" alt="" /></a>
+            <a href="#"><img src="source/assets/dest/images/pay/master.jpg" alt="" /></a>
+            <a href="#"><img src="source/assets/dest/images/pay/pay.jpg" alt="" /></a>
+            <a href="#"><img src="source/assets/dest/images/pay/visa.jpg" alt="" /></a>
+            <a href="#"><img src="source/assets/dest/images/pay/paypal.jpg" alt="" /></a>
         </p>
         <div class="clearfix"></div>
     </div> <!-- .container -->
-</div> <!-- .copyright --> 
+</div> <!-- .copyright -->
