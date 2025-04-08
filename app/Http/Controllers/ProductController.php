@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Models\ProductType;
-use App\Models\Slide;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Session;
 
 class ProductController extends Controller
 {
@@ -20,32 +20,62 @@ class ProductController extends Controller
     public function getProductDetail($id)
     {
         $product = Product::find($id);
+        
+        if (!$product) {
+            return redirect()->route('home')->with('error', 'Sản phẩm không tồn tại');
+        }
+        
+        // Lấy các sản phẩm liên quan (cùng loại)
         $relatedProducts = Product::where('id_type', $product->id_type)
-            ->where('id', '<>', $id)
+            ->where('id', '!=', $id)
             ->take(4)
             ->get();
-        $productTypes = ProductType::all();
+            
+        // Lấy sản phẩm mới
+        $newProducts = Product::orderBy('created_at', 'desc')
+            ->take(4)
+            ->get();
+            
+        // Xử lý giỏ hàng
+        $cart = Session::get('cart');
+        $product_cart = $cart ? $cart->items : [];
+        $totalPrice = $cart ? $cart->totalPrice : 0;
         
-        return view('product.detail', compact('product', 'relatedProducts', 'productTypes'));
+        return view('pages.product_detail', compact(
+            'product',
+            'relatedProducts',
+            'newProducts',
+            'product_cart',
+            'totalPrice'
+        ));
     }
     
     public function getProductsByType($type_id)
     {
-        $products = Product::where('id_type', $type_id)->paginate(8);
         $productType = ProductType::find($type_id);
-        $productTypes = ProductType::all();
         
-        return view('product.by_type', compact('products', 'productType', 'productTypes'));
-    }
-    
-    public function getSearch(Request $request)
-    {
-        $key = $request->key;
-        $products = Product::where('name', 'like', '%'.$key.'%')
-            ->orWhere('description', 'like', '%'.$key.'%')
-            ->paginate(8);
-        $productTypes = ProductType::all();
+        if (!$productType) {
+            return redirect()->route('home')->with('error', 'Loại sản phẩm không tồn tại');
+        }
         
-        return view('product.search', compact('products', 'key', 'productTypes'));
+        $products = Product::where('id_type', $type_id)->paginate(8);
+        
+        // Lấy sản phẩm mới
+        $newProducts = Product::orderBy('created_at', 'desc')
+            ->take(4)
+            ->get();
+            
+        // Xử lý giỏ hàng
+        $cart = Session::get('cart');
+        $product_cart = $cart ? $cart->items : [];
+        $totalPrice = $cart ? $cart->totalPrice : 0;
+        
+        return view('pages.product_type', compact(
+            'productType',
+            'products',
+            'newProducts',
+            'product_cart',
+            'totalPrice'
+        ));
     }
 }
