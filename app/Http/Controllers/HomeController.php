@@ -7,9 +7,17 @@ use App\Models\ProductType;
 use App\Models\Slide;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\View;
 
 class HomeController extends Controller
 {
+    public function __construct()
+    {
+        // Chia sẻ biến loai_sp với tất cả các view
+        $productTypes = ProductType::all();
+        View::share('loai_sp', $productTypes);
+    }
+
     public function index()
     {
         $slides = Slide::all();

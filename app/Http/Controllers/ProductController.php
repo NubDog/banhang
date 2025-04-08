@@ -6,9 +6,17 @@ use App\Models\Product;
 use App\Models\ProductType;
 use App\Models\Slide;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\View;
 
 class ProductController extends Controller
 {
+    public function __construct()
+    {
+        // Chia sẻ biến loai_sp với tất cả các view
+        $productTypes = ProductType::all();
+        View::share('loai_sp', $productTypes);
+    }
+    
     public function getProductDetail($id)
     {
         $product = Product::find($id);
