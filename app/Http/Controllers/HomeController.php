@@ -25,8 +25,11 @@ class HomeController extends Controller
         // Lấy 4 sản phẩm mới nhất (dựa vào created_at)
         $newProducts = Product::orderBy('created_at', 'desc')->take(4)->get();
         
-        // Lấy sản phẩm khuyến mãi (is_promotion = 1)
-        $promotionProducts = Product::where('is_promotion', 1)->take(8)->get();
+        // Lấy sản phẩm khuyến mãi (promotion_price > 0)
+        $promotionProducts = Product::whereNotNull('promotion_price')
+            ->where('promotion_price', '>', 0)
+            ->take(8)
+            ->get();
             
         // Lấy tất cả sản phẩm
         $allProducts = Product::paginate(12);
