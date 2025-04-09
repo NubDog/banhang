@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\PasswordResetController;
 
 // Trang chủ
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -41,3 +42,11 @@ Route::post('dat-hang', [CartController::class, 'postCheckout'])->name('dathang'
 
 // Temporary route to check users table structure
 Route::get('/check-users-table', [UserController::class, 'checkUsersTable']);
+
+// Thêm route cho form quên mật khẩu
+Route::get('/forgot-password', function () {
+    return view('auth.forgot-password');
+})->name('password.request');
+
+Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLink'])
+    ->name('password.email');
