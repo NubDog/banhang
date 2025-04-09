@@ -53,11 +53,14 @@ Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLink'
 
 
 // Admin routes
-Route::get('/admin/dang-nhap', [UserController::class, 'getAdminLogin'])->name('admin.getLogin');
-Route::post('/admin/dang-nhap', [UserController::class, 'postAdminLogin'])->name('admin.postLogin');
-Route::get('/admin/dang-xuat', [UserController::class, 'getAdminLogout'])->name('admin.logout');
+// Xóa các route này
+// Route::get('/admin/dang-nhap', [UserController::class, 'getAdminLogin'])->name('admin.getLogin');
+// Route::post('/admin/dang-nhap', [UserController::class, 'postAdminLogin'])->name('admin.postLogin');
 
-// Admin protected routes
+// Giữ lại route group cho admin
 Route::group(['prefix' => 'admin', 'middleware' => 'adminLogin'], function() {
     // Your admin routes here
+    Route::get('/dashboard', function() {
+        return "Welcome to Admin Dashboard"; // Tạm thời return text, đợi làm dashboard sau
+    });
 });

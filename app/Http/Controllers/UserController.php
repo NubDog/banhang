@@ -80,6 +80,13 @@ class UserController extends Controller
         ]);
 
         if (Auth::attempt($credentials)) {
+            $user = Auth::user();
+            if ($user->level == 1 || $user->level == 2) {
+                return redirect('/admin/dashboard')->with([
+                    'flag' => 'success',
+                    'message' => 'Đăng nhập thành công'
+                ]);
+            }
             return redirect()->route('home')->with([
                 'flag' => 'success',
                 'message' => 'Đăng nhập thành công'
