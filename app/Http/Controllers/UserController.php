@@ -107,4 +107,54 @@ class UserController extends Controller
         $columns = \Illuminate\Support\Facades\DB::select('SHOW COLUMNS FROM users');
         dd($columns); // This will display the table structure
     }
+
+    public function getAdminLogin()
+    {
+        if (Auth::check() && (Auth::user()->level == 1 || Auth::user()->level == 2)) {
+            return redirect('/admin/dashboard');
+        }
+        return view('admin.login');
+    }
+
+    public function postAdminLogin(Request $request)
+    {
+        $credentials = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|min:6|max:20'
+        ], [
+            'email.required' => 'Vui lòng nhập email',
+            'email.email' => 'Không đúng định dạng email',
+            'password.required' => 'Vui lòng nhập mật khẩu',
+            'password.min' => 'Mật khẩu ít nhất 6 ký tự',
+            'password.max' => 'Mật khẩu tối đa 20 ký tự'
+        ]);
+
+        if (Auth::attempt($credentials)) {
+            $user = Auth::user();
+            if ($user->level == 1 || $user->level == 2) {
+                return redirect('/admin/dashboard')->with([
+                    'flag' => 'success',
+                    'message' => 'Đăng nhập thành công'
+                ]);
+            }
+            Auth::logout();
+            return back()->with([
+                'flag' => 'danger',
+                'message' => 'Bạn không có quyền truy cập trang admin'
+            ]);
+        }
+
+        return back()->with([
+            'flag' => 'danger',
+            'message' => 'Email hoặc mật khẩu không đúng'
+        ]);
+    }
+
+    public function getAdminLogout(Request $request)
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect()->route('admin.getLogin');
+    }
 }

@@ -50,3 +50,14 @@ Route::get('/forgot-password', function () {
 
 Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLink'])
     ->name('password.email');
+
+
+// Admin routes
+Route::get('/admin/dang-nhap', [UserController::class, 'getAdminLogin'])->name('admin.getLogin');
+Route::post('/admin/dang-nhap', [UserController::class, 'postAdminLogin'])->name('admin.postLogin');
+Route::get('/admin/dang-xuat', [UserController::class, 'getAdminLogout'])->name('admin.logout');
+
+// Admin protected routes
+Route::group(['prefix' => 'admin', 'middleware' => 'adminLogin'], function() {
+    // Your admin routes here
+});
