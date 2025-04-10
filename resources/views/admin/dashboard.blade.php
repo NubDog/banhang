@@ -1,13 +1,32 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Admin Dashboard</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-    <div class="container mt-5">
-        <h1>Welcome to Admin Dashboard</h1>
-        <p>You are logged in as admin</p>
+@extends('admin.master')
+@section('title', 'Dashboard')
+@section('content')
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">Dashboard</h1>
     </div>
-</body>
-</html>
+    <!-- /.col-lg-12 -->
+    <div class="col-lg-12">
+        @if(session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
+        @if(session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
+        @endif
+    </div>
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Welcome to Admin Dashboard
+            </div>
+            <div class="panel-body">
+                <p>You are logged in as admin</p>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection

@@ -6,6 +6,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PasswordResetController;
+use App\Http\Controllers\CategoryController;
 
 // Trang chủ
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -26,15 +27,35 @@ Route::get('/dang-nhap', [UserController::class, 'getLogin'])->name('login');
 Route::post('/dang-nhap', [UserController::class, 'postLogin']);
 Route::get('/dang-xuat', [UserController::class, 'getLogout'])->name('logout');
 
+// Admin routes - không sử dụng middleware tạm thời
+Route::get('/admin/dangnhap', [UserController::class, 'getLogin'])->name('admin.getLogin');
+Route::post('/admin/dangnhap', [UserController::class, 'postLogin'])->name('admin.postLogin');
+Route::get('/admin/dangxuat', [UserController::class, 'getLogout'])->name('admin.getLogout');
+
+// Nhóm route cho admin - không sử dụng middleware tạm thời
+Route::prefix('admin')->group(function() {
+    Route::get('/dashboard', function() {
+        return view('admin.dashboard');
+    })->name('admin.dashboard');
+    
+    // Category routes
+    Route::prefix('category')->group(function() {
+        Route::get('danhsach', [CategoryController::class, 'getCateList'])->name('admin.getCateList');
+        Route::get('them', [CategoryController::class, 'getCateAdd'])->name('admin.getCateAdd');
+        Route::post('them', [CategoryController::class, 'postCateAdd'])->name('admin.postCateAdd');
+        Route::get('xoa/{id}', [CategoryController::class, 'getCateDelete'])->name('admin.getCateDelete');
+        Route::get('sua/{id}', [CategoryController::class, 'getCateEdit'])->name('admin.getCateEdit');
+        Route::post('sua/{id}', [CategoryController::class, 'postCateEdit'])->name('admin.postCateEdit');
+    });
+});
+
 // Sản phẩm
 Route::get('/san-pham/{id}', [ProductController::class, 'getProductDetail'])->name('product.detail');
 Route::get('/loai-san-pham/{type_id}', [ProductController::class, 'getProductsByType'])->name('loaisanpham');
 
 // Giỏ hàng
-// Route cho giỏ hàng
-// Giỏ hàng và đặt hàng
 Route::get('add-to-cart/{id}', [CartController::class, 'addToCart'])->name('add-to-cart');
-Route::get('reduce-by-one/{id}', [CartController::class, 'reduceByOne'])->name('reduce-by-one'); // Add this line
+Route::get('reduce-by-one/{id}', [CartController::class, 'reduceByOne'])->name('reduce-by-one');
 Route::get('remove-from-cart/{id}', [CartController::class, 'removeFromCart'])->name('remove-from-cart');
 Route::get('cart', [CartController::class, 'showCart'])->name('cart');
 Route::get('dat-hang', [CartController::class, 'getCheckout'])->name('dathang');
@@ -50,17 +71,3 @@ Route::get('/forgot-password', function () {
 
 Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLink'])
     ->name('password.email');
-
-
-// Admin routes
-// Xóa các route này
-// Route::get('/admin/dang-nhap', [UserController::class, 'getAdminLogin'])->name('admin.getLogin');
-// Route::post('/admin/dang-nhap', [UserController::class, 'postAdminLogin'])->name('admin.postLogin');
-
-// Giữ lại route group cho admin
-// Thay đổi cách khai báo middleware
-Route::middleware(['adminLogin'])->prefix('admin')->group(function() {
-    Route::get('/dashboard', function() {
-        return view('admin.dashboard');
-    })->name('admin.dashboard');
-});

@@ -26,6 +26,7 @@ class UserController extends Controller
 
     public function postRegister(Request $request)
     {
+        // Validation code remains the same
         $validated = $request->validate(
             [
                 'email' => 'required|email|unique:users,email',
@@ -54,8 +55,7 @@ class UserController extends Controller
         $user->password = Hash::make($request->password);
         $user->phone = $request->phone;
         $user->address = $request->address;
-        // Remove the level assignment for now
-        // $user->level = 3;
+        $user->level = 3; // Regular user
         $user->save();
 
         return redirect()->back()->with('success', 'Tạo tài khoản thành công');
@@ -68,35 +68,32 @@ class UserController extends Controller
 
     public function postLogin(Request $request)
     {
-        $credentials = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required|min:6|max:20'
-        ], [
-            'email.required' => 'Vui lòng nhập email',
-            'email.email' => 'Không đúng định dạng email',
-            'password.required' => 'Vui lòng nhập mật khẩu',
-            'password.min' => 'Mật khẩu ít nhất 6 ký tự',
-            'password.max' => 'Mật khẩu tối đa 20 ký tự'
-        ]);
-
-        if (Auth::attempt($credentials)) {
+        $validated = $request->validate(
+            [
+                'email'=>'required|email',
+                'password'=>'required|min:6|max:20'
+            ],
+            [
+                'email.required'=>'Vui lòng nhập email',
+                'email.email'=>'Không đúng định dạng email',
+                'password.required'=>'Vui lòng nhập mật khẩu',
+                'password.min'=>'Mật khẩu ít nhất 6 ký tự'
+            ]
+        );
+        
+        $credentials = array('email'=>$request->email, 'password'=>$request->password);
+        if(Auth::attempt($credentials)) {
             $user = Auth::user();
-            if ($user->level == 1 || $user->level == 2) {
-                return redirect('/admin/dashboard')->with([
-                    'flag' => 'success',
-                    'message' => 'Đăng nhập thành công'
-                ]);
+            if($user->level == 1 || $user->level == 2) {
+                // Redirect to admin dashboard if user is admin
+                return redirect('/admin/dashboard')->with(['flag'=>'success','message'=>'Đăng nhập thành công']);
+            } else {
+                // Redirect to home page for regular users
+                return redirect('/')->with(['flag'=>'success','message'=>'Đăng nhập thành công']);
             }
-            return redirect()->route('home')->with([
-                'flag' => 'success',
-                'message' => 'Đăng nhập thành công'
-            ]);
+        } else {
+            return redirect()->back()->with(['flag'=>'danger','message'=>'Đăng nhập không thành công']);
         }
-
-        return back()->with([
-            'flag' => 'danger',
-            'message' => 'Email hoặc mật khẩu không đúng'
-        ]);
     }
 
     public function getLogout(Request $request)
@@ -104,8 +101,7 @@ class UserController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        Session::forget('cart');
-        return redirect()->route('home');
+        return redirect('/');
     }
 
     // Add this temporarily to see the table structure
@@ -113,55 +109,5 @@ class UserController extends Controller
     {
         $columns = \Illuminate\Support\Facades\DB::select('SHOW COLUMNS FROM users');
         dd($columns); // This will display the table structure
-    }
-
-    public function getAdminLogin()
-    {
-        if (Auth::check() && (Auth::user()->level == 1 || Auth::user()->level == 2)) {
-            return redirect('/admin/dashboard');
-        }
-        return view('admin.login');
-    }
-
-    public function postAdminLogin(Request $request)
-    {
-        $credentials = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required|min:6|max:20'
-        ], [
-            'email.required' => 'Vui lòng nhập email',
-            'email.email' => 'Không đúng định dạng email',
-            'password.required' => 'Vui lòng nhập mật khẩu',
-            'password.min' => 'Mật khẩu ít nhất 6 ký tự',
-            'password.max' => 'Mật khẩu tối đa 20 ký tự'
-        ]);
-
-        if (Auth::attempt($credentials)) {
-            $user = Auth::user();
-            if ($user->level == 1 || $user->level == 2) {
-                return redirect('/admin/dashboard')->with([
-                    'flag' => 'success',
-                    'message' => 'Đăng nhập thành công'
-                ]);
-            }
-            Auth::logout();
-            return back()->with([
-                'flag' => 'danger',
-                'message' => 'Bạn không có quyền truy cập trang admin'
-            ]);
-        }
-
-        return back()->with([
-            'flag' => 'danger',
-            'message' => 'Email hoặc mật khẩu không đúng'
-        ]);
-    }
-
-    public function getAdminLogout(Request $request)
-    {
-        Auth::logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-        return redirect()->route('admin.getLogin');
     }
 }
