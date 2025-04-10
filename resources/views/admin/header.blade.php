@@ -7,7 +7,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="{{ url('/admin/dashboard') }}">Admin Area</a>
+        <a class="navbar-brand" href="{{ route('admin.dashboard') }}">Admin Area</a>
     </div>
     <!-- /.navbar-header -->
 
@@ -15,7 +15,7 @@
         <!-- /.dropdown -->
         <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                <i class="fa fa-user fa-fw"></i> {{ Auth::user()->full_name }} <i class="fa fa-caret-down"></i>
+                <i class="fa fa-user fa-fw"></i> {{ Auth::user()->full_name ?? 'Admin' }} <i class="fa fa-caret-down"></i>
             </a>
             <ul class="dropdown-menu dropdown-user">
                 <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
@@ -23,11 +23,7 @@
                 <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
                 </li>
                 <li class="divider"></li>
-                <!-- Tìm dòng này -->
-                <li><a href="{{ route('logout') }}"><i class="fa fa-sign-out fa-fw"></i> Logout</a></li>
-                
-                <!-- Và thay bằng -->
-                <li><a href="{{ route('logout') }}"><i class="fa fa-sign-out fa-fw"></i> Logout</a></li>
+                <li><a href="{{ route('admin.logout') }}"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                 </li>
             </ul>
             <!-- /.dropdown-user -->
@@ -51,7 +47,7 @@
                     <!-- /input-group -->
                 </li>
                 <li>
-                    <a href="{{ url('/admin/dashboard') }}"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                    <a href="{{ route('admin.dashboard') }}"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                 </li>
                 <li>
                     <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Category<span class="fa arrow"></span></a>
@@ -60,7 +56,7 @@
                             <a href="{{ route('admin.getCateList') }}">List Category</a>
                         </li>
                         <li>
-                            <a href="{{ route('admin.getCateAdd') }}">Add Category</a>
+                            <a href="{{ route('admin.getCateAdd() }}">Add Category</a>
                         </li>
                     </ul>
                     <!-- /.nav-second-level -->
@@ -69,13 +65,38 @@
                     <a href="#"><i class="fa fa-cube fa-fw"></i> Product<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
                         <li>
-                            <a href="#">List Product</a>
+                            <a href="{{ route('admin.product.index') }}">List Product</a>
                         </li>
                         <li>
-                            <a href="#">Add Product</a>
+                            <a href="{{ route('admin.product.create') }}">Add Product</a>
                         </li>
                     </ul>
                     <!-- /.nav-second-level -->
                 </li>
                 <li>
-                    <a href="#"><i class="fa fa-users fa-fw"></i> User
+                    <a href="#"><i class="fa fa-users fa-fw"></i> User<span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li>
+                            <a href="{{ route('admin.user.index') }}">List User</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('admin.user.create') }}">Add User</a>
+                        </li>
+                    </ul>
+                    <!-- /.nav-second-level -->
+                </li>
+                <li>
+                    <a href="#"><i class="fa fa-shopping-cart fa-fw"></i> Order<span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li>
+                            <a href="{{ route('admin.order.index') }}">List Order</a>
+                        </li>
+                    </ul>
+                    <!-- /.nav-second-level -->
+                </li>
+            </ul>
+        </div>
+        <!-- /.sidebar-collapse -->
+    </div>
+    <!-- /.navbar-static-side -->
+</nav>

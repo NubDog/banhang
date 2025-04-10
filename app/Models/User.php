@@ -47,4 +47,12 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    /**
+     * Kiểm tra xem người dùng có phải là admin không
+     */
+    public function isAdmin()
+    {
+        return $this->level == 1 || $this->level == 2;
+    }
 }

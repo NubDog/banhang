@@ -4,9 +4,9 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Admin Dashboard">
+    <meta name="description" content="">
     <meta name="author" content="">
-    <title>Admin - @yield('title')</title>
+    <title>Admin Area - @yield('title')</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="{{ asset('source/admin/bower_components/bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet">
@@ -26,11 +26,15 @@
     <!-- DataTables Responsive CSS -->
     <link href="{{ asset('source/admin/bower_components/datatables-responsive/css/dataTables.responsive.css') }}" rel="stylesheet">
     
+    <!-- Thêm style.css từ theme chính -->
+    <link href="{{ asset('source/assets/dest/css/style.css') }}" rel="stylesheet">
+    
     @yield('css')
 </head>
 
 <body>
     <div id="wrapper">
+        <!-- Navigation -->
         @include('admin.header')
 
         <!-- Page Content -->
@@ -57,18 +61,9 @@
     <script src="{{ asset('source/admin/dist/js/sb-admin-2.js') }}"></script>
 
     <!-- DataTables JavaScript -->
-    <script src="{{ asset('source/admin/bower_components/DataTables/media/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('source/admin/bower_components/datatables/media/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('source/admin/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js') }}"></script>
-
-    <!-- Page-Level Demo Scripts - Tables - Use for reference -->
-    <script>
-    $(document).ready(function() {
-        $('#dataTables-example').DataTable({
-            responsive: true
-        });
-    });
-    </script>
     
-    @yield('script')
+    @yield('js')
 </body>
 </html>

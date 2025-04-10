@@ -10,21 +10,17 @@ class Bill extends Model
     use HasFactory;
 
     protected $table = 'bills';
-    
+
     protected $fillable = [
-        'id_customer',
-        'date_order',
-        'total',
-        'payment',
-        'note'
+        'id_customer', 'date_order', 'total', 'payment', 'note', 'status'
     ];
-    
+
     public function customer()
     {
         return $this->belongsTo(Customer::class, 'id_customer', 'id');
     }
-    
-    public function billDetails()
+
+    public function orderDetails()
     {
         return $this->hasMany(BillDetail::class, 'id_bill', 'id');
     }

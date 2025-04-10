@@ -10,24 +10,18 @@ class AdminLoginMiddleware
 {
     /**
      * Handle an incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @return mixed
      */
     public function handle(Request $request, Closure $next)
     {
-        if(Auth::check()){
-            $user = Auth::user();
-            if($user->level == 1 || $user->level == 2){
-                return $next($request);
-            }
-            else {
-                return redirect('/dang-nhap')->with(['flag'=>'danger','message'=>'Bạn không có quyền truy cập trang admin']);
-            }
+        if (!Auth::check()) {
+            return redirect()->route('admin.login');
         }
-        else {
-            return redirect('/dang-nhap')->with(['flag'=>'danger','message'=>'Vui lòng đăng nhập để tiếp tục']);
+        
+        $user = Auth::user();
+        if (!$user->isAdmin()) {
+            return redirect()->route('admin.login')->with('error', 'Bạn không có quyền truy cập vào trang quản trị.');
         }
+        
+        return $next($request);
     }
 }

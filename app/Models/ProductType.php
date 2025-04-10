@@ -10,19 +10,11 @@ class ProductType extends Model
     use HasFactory;
 
     protected $table = 'type_products';
-    
+
     protected $fillable = [
-        'name',
-        'description',
-        'image',
+        'name', 'description', 'image'
     ];
 
-    protected $casts = [
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
-    ];
-
-    // Define relationship with Product
     public function products()
     {
         return $this->hasMany(Product::class, 'id_type', 'id');

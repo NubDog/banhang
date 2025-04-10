@@ -49,5 +49,26 @@ class HomeController extends Controller
         ));
     }
     
+    public function dashboard()
+    {
+        $totalOrders = \App\Models\Bill::count();
+        $totalProducts = \App\Models\Product::count();
+        $totalUsers = \App\Models\User::count();
+        $totalCategories = \App\Models\ProductType::count();
+        
+        $recentOrders = \App\Models\Bill::with('customer')
+                        ->orderBy('created_at', 'desc')
+                        ->take(5)
+                        ->get();
+                        
+        return view('admin.dashboard', compact(
+            'totalOrders', 
+            'totalProducts', 
+            'totalUsers', 
+            'totalCategories',
+            'recentOrders'
+        ));
+    }
+    
     // Các phương thức khác giữ nguyên
 }
